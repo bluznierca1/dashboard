@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Register routes.
+ * Router::registerPathWithController( {PATH}, {CONTROLLER}, {METHOD}
+ * {PATH} -> expected URL
+ * {Controller} -> name of controller handling request for given URL
+ * {METHOD} -> name of method inside controller to be used for given URL
+ */
+
 use Dashboard\Router\Router;
 
 // Controller

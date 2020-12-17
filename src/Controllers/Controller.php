@@ -12,6 +12,17 @@ class Controller implements ControllerInterface {
 
     protected $request;
 
+    public function __construct( Request $request, string $method ) {
+        $this->request = $request;
+
+        if( method_exists($this, $method) ) {
+            $this->$method();
+        } else {
+            $this->notFound();
+        }
+
+    }
+
     /**
      * Extract class name (without namespaces)
      * Calling static::class inside this method would always return 'Controller'
@@ -24,17 +35,11 @@ class Controller implements ControllerInterface {
         return !empty($explodedNamespaces) ? end($explodedNamespaces) : '';
     }
 
-    public function __construct( Request $request, string $method ) {
-        $this->request = $request;
-
-        if( method_exists($this, $method) ) {
-            $this->$method();
-        } else {
-            $this->notFound();
-        }
-
-    }
-
+    /**
+     * Trigger View
+     *
+     * @param array $data
+     */
     public function renderView( array $data = [] ): void {
 
         $controllerName = self::extractClassName(static::class);
@@ -46,7 +51,8 @@ class Controller implements ControllerInterface {
     }
 
     /**
-     * Method assigned to the rout was not found.
+     * Method assigned to the route was not found.
+     * Redirect to home page.
      */
     public function notFound(): void {
         RedirectHelper::redirectToHomePage();

@@ -26,15 +26,25 @@ class CustomerEntity extends DB implements EntityInterface {
         'email' => 's'
     ];
 
+    /**
+     * @return array|null
+     */
     public function getAll(): ?array {
         $query = 'SELECT * FROM ' . self::$tableName;
         return $this->executeGetRowsQuery($query);
     }
 
+    /**
+     * @return bool
+     */
     public function eraseAllRecords(): bool {
         return $this->deleteAll(self::$tableName);
     }
 
+    /**
+     * @param int|null $id
+     * @return array
+     */
     public function findById( int $id = null ): array {
 
         if( !isset($id) ) {
@@ -66,7 +76,13 @@ class CustomerEntity extends DB implements EntityInterface {
 
     }
 
-    public function findByEmail( string $email = '' ) {
+    /**
+     * Attempt to find by email - unique
+     *
+     * @param string $email
+     * @return mixed
+     */
+    public function findByEmail( string $email = '' ): ?array {
 
         try {
             $query = "SELECT * FROM " . self::$tableName . " WHERE email = ?";

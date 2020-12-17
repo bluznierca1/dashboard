@@ -8,16 +8,25 @@ use Dashboard\Models\OrderEntity;
 use Dashboard\Models\OrderItemsEntity;
 
 class Mocker {
+    /**
+     * @return bool
+     */
     public function clearCustomersTable(): bool {
         $customersEntity = new CustomerEntity();
         return $customersEntity->eraseAllRecords();
     }
 
+    /**
+     * @return bool
+     */
     public function clearOrdersTable(): bool {
         $orderEntity = new OrderEntity();
         return $orderEntity->eraseAllRecords();
     }
 
+    /**
+     * @return bool
+     */
     public function clearOrderItemsTable(): bool {
         $orderItemsEntity = new OrderItemsEntity();
         return $orderItemsEntity->eraseAllRecords();
@@ -44,7 +53,12 @@ class Mocker {
         return false;
     }
 
-    public function fillCustomersTable() {
+    /**
+     * Mock data for customers table and save it
+     *
+     * @return bool
+     */
+    public function fillCustomersTable(): bool {
 
         $content = file_get_contents('https://jsonplaceholder.typicode.com/users');
 
@@ -84,6 +98,12 @@ class Mocker {
 
     }
 
+    /**
+     * Mock data for orders table and save it
+     *
+     * @return bool
+     * @throws \Exception
+     */
     public function fillOrdersTable(): bool {
 
         $customerEntity = new CustomerEntity();
@@ -160,6 +180,12 @@ class Mocker {
 
     }
 
+    /**
+     * Mock data for order_items table and save
+     *
+     * @return bool
+     * @throws \Exception
+     */
     public function fillOrderItemsTable() {
 
         $ordersEntity = new OrderEntity();
@@ -197,6 +223,13 @@ class Mocker {
 
     }
 
+    /**
+     * Fill DB table by table
+     * return false if any fails so it gets erased
+     *
+     * @return bool
+     * @throws \Exception
+     */
     public function fillDbWithRecords(): bool {
 
         if ($this->fillCustomersTable()) {

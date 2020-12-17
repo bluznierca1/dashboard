@@ -9,11 +9,16 @@ abstract class DB {
     protected $connection;
 
     public function __construct() {
-
+        // Set connection object to class attribute so we can get it in every child class
         $this->connection = $this->createDbConnection();
-
     }
 
+    /**
+     * Attempt to create DB connection
+     * Die if failure
+     *
+     * @return object
+     */
     private function createDbConnection(): object {
 
         $ini_array = parse_ini_file(APP_ROOT . "/config.ini", true)['database_configuration'];
@@ -58,6 +63,13 @@ abstract class DB {
 
     }
 
+    /**
+     * Delete all records from given table
+     * Table needs to contain 'id' column
+     *
+     * @param string $tableName
+     * @return bool
+     */
     protected function deleteAll( string $tableName = '' ): bool {
 
         try {
@@ -85,12 +97,12 @@ abstract class DB {
 
     }
 
-    public function throwExceptionForQuery( object $stmt, string $message = '' ): void {
-        $message = !empty($message) ? $message : $this->connection->error;
-        $stmt->close();
-        throw new Exception($message);
-    }
-
+    /**
+     * Fetch associative array from result
+     *
+     * @param $result
+     * @return array
+     */
     public function getAllRowsFromResultAsAssocArray( $result ): array {
         $rows = [];
 

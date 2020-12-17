@@ -33,7 +33,7 @@ class Request {
     }
 
     // Getters are for controller.
-    // No setters as in here we use attributes straight away and nothing will be manipulated from Controller
+    // No setters as in here, use attributes straight away and nothing will be manipulated from Controller
     public function getRequestUri(): string {
         return $this->requestUri;
     }
@@ -58,6 +58,9 @@ class Request {
         RedirectHelper::redirectToHomePage();
     }
 
+    /**
+     * Prepare date for controller and trigger it
+     */
     private function triggerController(): void {
 
         $routerData = Router::getRegisteredRoutesWithControllers()[$this->requestUriPreparedForRouter];
@@ -70,6 +73,10 @@ class Request {
 
     }
 
+    /**
+     * Check if URL provided and registered
+     * @return bool
+     */
     private function validateUri(): bool {
 
         $base = $this->explodeRequestUri()['base'];
@@ -116,7 +123,7 @@ class Request {
     }
 
     /**
-     * Set class attributes
+     * Set class attributes for easier access
      */
     private function buildRequestData(): void {
 

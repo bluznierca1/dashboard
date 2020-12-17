@@ -28,7 +28,11 @@ class OrderItemsEntity extends DB implements EntityInterface {
         'order_id'  => 'i'
     ];
 
-    public function save(array $data = []) {
+    /**
+     * @param array $data
+     * @return int|null
+     */
+    public function save(array $data = []): ?int {
 
         $this->mapDataToEntityAttributes($data);
 
@@ -70,11 +74,17 @@ class OrderItemsEntity extends DB implements EntityInterface {
         // TODO: Implement findById() method.
     }
 
+    /**
+     * @return array|null
+     */
     public function getAll(): ?array {
         $query = 'SELECT * FROM ' . self::$tableName;
         return $this->executeGetRowsQuery($query);
     }
 
+    /**
+     * @return bool
+     */
     public function eraseAllRecords(): bool {
         return $this->deleteAll(self::$tableName);
     }

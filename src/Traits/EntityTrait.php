@@ -4,11 +4,22 @@ namespace Dashboard\Traits;
 
 trait EntityTrait {
 
+    /**
+     * Check if class has given attribute
+     *
+     * @param string $attr
+     * @return bool
+     */
     public function hasAttribute( $attr = "" ): bool {
         $objectVars = get_object_vars($this);
         return array_key_exists($attr, $objectVars);
     }
 
+    /**
+     * Map received data (should contain data for column in DB)
+     * into class attributes (later is it used to build query)
+     * @param $data
+     */
     public function mapDataToEntityAttributes($data) {
         foreach( $data as $keyName => $value ) {
             if( $this->hasAttribute($keyName) ) {
@@ -17,6 +28,14 @@ trait EntityTrait {
         }
     }
 
+    /**
+     * Return parameters for bind_param, f.ex. ('ssiddss')
+     * $doubleValue -> defines if above params will be doubled
+     * used for UPDATE part of query
+     *
+     * @param bool $doubleValue
+     * @return string
+     */
     public function getTypesForBindParam( bool $doubleValue = true ): string {
 
         //Create dynamically types for bind_param()
@@ -34,6 +53,12 @@ trait EntityTrait {
 
     }
 
+    /**
+     * Build question marks for prepared statement
+     * based on class attributes (relating to columns in DB)
+     *
+     * @return string|string[]
+     */
     public function getQuestionMarksForPreparedStatement() {
         $questionMarksValues = "(";
 
@@ -54,6 +79,12 @@ trait EntityTrait {
 
     }
 
+    /**
+     * Return pairs for update query (f.ex. 'id' = ?, 'price' = ?)
+     *
+     * @param array $keysToBeExcluded
+     * @return array
+     */
     public function getPairsForUpdateQuery( $keysToBeExcluded = [] ) {
 
         $defaultKeysToBeExcluded = ['connection', 'logger'];
