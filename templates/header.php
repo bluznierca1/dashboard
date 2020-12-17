@@ -15,4 +15,5 @@
 
 <body>
 
-    <h1>HEADER</h1>
+<?php require_once(TEMPLATES_PATH . 'common/navMenu.php'); ?>
+

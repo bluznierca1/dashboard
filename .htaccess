@@ -1,2 +1,2 @@
 RewriteEngine on
-RewriteRule ^((?!index\.php).+)$ http://localhost:8080/dashboard/index.php [L]
+RewriteRule ^((?!index\.php|includes/scripts/*|includes/css).+)$ http://localhost:8080/dashboard/index.php [L]
