@@ -5,3 +5,4 @@
 5. CREATE INDEX order_index ON orders (id, customer_id)
 6. CREATE TABLE order_items ( id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, ean VARCHAR(255) NOT NULL, quantity INT NOT NULL DEFAULT 1, price DECIMAL(20,2) NOT NULL, order_id INT NOT NULL, FOREIGN KEY (order_id) REFERENCES orders(id) )
 7. CREATE INDEX order_items_index ON order_items (id, order_id)
+8. ALTER TABLE customers ADD date_created DATETIME NOT NULL DEFAULT NOW()
