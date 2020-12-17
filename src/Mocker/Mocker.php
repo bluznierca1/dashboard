@@ -57,6 +57,7 @@ class Mocker {
      * Mock data for customers table and save it
      *
      * @return bool
+     * @throws \Exception
      */
     public function fillCustomersTable(): bool {
 
@@ -77,6 +78,8 @@ class Mocker {
         $success = true;
         foreach( $decodedContent as $fakeCustomer ) {
 
+            echo 'date: ' . date('Y-m-d H:i:s', VariableHelper::getRandomIntegerFromRange(strtotime('-2 years'), time())) . '<br />';
+
             $foundCustomer = $customersEntity->findByEmail($fakeCustomer['email']);
 
             $explodedName = explode(' ', $fakeCustomer['name']);
@@ -84,7 +87,8 @@ class Mocker {
                 'id' => $foundCustomer['id'] ?? null,
                 'first_name' => $explodedName[0],
                 'last_name' => $explodedName[1],
-                'email' => $fakeCustomer['email']
+                'email' => $fakeCustomer['email'],
+                'date_created' => date('Y-m-d H:i:s', VariableHelper::getRandomIntegerFromRange(strtotime('-2 years'), time()))
             ];
 
             if( !$customersEntity->save($customerData) ) {

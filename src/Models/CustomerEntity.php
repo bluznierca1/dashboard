@@ -14,16 +14,18 @@ class CustomerEntity extends DB implements EntityInterface {
     public $first_name;
     public $last_name;
     public $email;
+    public $date_created;
 
     // get_object_vars() is used to build query - exclude unwanted parameters
     protected static $keysToBeExcludedFromQuery = ['connection'];
 
     protected static $tableName = 'customers';
     protected static $dbFields = [
-        'id' => 'i',
-        'first_name' => 's',
-        'last_name' => 's',
-        'email' => 's'
+        'id'            => 'i',
+        'first_name'    => 's',
+        'last_name'     => 's',
+        'email'         => 's',
+        'date_created'  => 's'
     ];
 
     /**
@@ -134,11 +136,13 @@ class CustomerEntity extends DB implements EntityInterface {
                     $this->first_name,
                     $this->last_name,
                     $this->email,
+                    $this->date_created,
                     // ON UPDATE
                     $this->id,
                     $this->first_name,
                     $this->last_name,
-                    $this->email
+                    $this->email,
+                    $this->date_created
                 );
 
                 if( $stmt->execute() ) {
@@ -154,6 +158,39 @@ class CustomerEntity extends DB implements EntityInterface {
         } catch( Exception $e ) {
             echo 'EXCEPTION ERROR: ' . $e->getMessage();
             return null;
+        }
+
+    }
+
+    public function fetchDataForDateRange( string $dateFrom = '', string $dateTo = '' ): ?array {
+
+        $query = 'SELECT * FROM ' . self::$tableName . ' WHERE date_created BETWEEN ? AND ?';
+
+        try {
+
+            if( $stmt = $this->connection->prepare($query) ) {
+
+                $stmt->bind_param(
+                    'ss',
+                    $dateFrom,
+                    $dateTo
+                );
+
+                if( $stmt->execute() ) {
+
+                    $result = $stmt->get_result();
+
+                    $customers = $this->getAllRowsFromResultAsAssocArray($result);
+                    $stmt->close();
+
+                    return $customers;
+                }
+            }
+
+            throw new Exception( $this->connection->error );
+
+        } catch( Exception $e ) {
+            die($e->getMessage());
         }
 
     }
