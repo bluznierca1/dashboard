@@ -162,27 +162,27 @@ class CustomerEntity extends DB implements EntityInterface {
 
     }
 
-    public function fetchDataForDateRange( string $dateFrom = '', string $dateTo = '' ): ?array {
-
-        $query = 'SELECT * FROM ' . self::$tableName . ' WHERE date_created BETWEEN ? AND ?';
+    public function getCustomersUntilGivenDate( string $dateTo = '' ): array {
+        if( empty($dateTo) ) {
+            return [];
+        }
 
         try {
 
-            if( $stmt = $this->connection->prepare($query) ) {
+            $query = 'SELECT * FROM ' . self::$tableName . ' WHERE date_created < ?';
 
+            if( $stmt = $this->connection->prepare($query) ) {
                 $stmt->bind_param(
-                    'ss',
-                    $dateFrom,
+                    's',
                     $dateTo
                 );
 
                 if( $stmt->execute() ) {
-
                     $result = $stmt->get_result();
 
                     $customers = $this->getAllRowsFromResultAsAssocArray($result);
-                    $stmt->close();
 
+                    $stmt->close();
                     return $customers;
                 }
             }
@@ -190,9 +190,8 @@ class CustomerEntity extends DB implements EntityInterface {
             throw new Exception( $this->connection->error );
 
         } catch( Exception $e ) {
-            die($e->getMessage());
+            die(' ERROR: ' . $e->getMessage());
         }
-
     }
 
 }
