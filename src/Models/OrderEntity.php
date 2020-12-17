@@ -93,4 +93,37 @@ class OrderEntity extends DB implements EntityInterface {
         return $this->deleteAll(self::$tableName);
     }
 
+    public function fetchDataForDateRange( string $dateFrom = '', string $dateTo = '' ): ?array {
+
+        $query = 'SELECT * FROM ' . self::$tableName . ' WHERE purchase_date BETWEEN ? AND ?';
+
+        try {
+
+            if( $stmt = $this->connection->prepare($query) ) {
+
+                $stmt->bind_param(
+                    'ss',
+                    $dateFrom,
+                    $dateTo
+                );
+
+                if( $stmt->execute() ) {
+
+                    $result = $stmt->get_result();
+
+                    $customers = $this->getAllRowsFromResultAsAssocArray($result);
+                    $stmt->close();
+
+                    return $customers;
+                }
+            }
+
+            throw new Exception( $this->connection->error );
+
+        } catch( Exception $e ) {
+            die($e->getMessage());
+        }
+
+    }
+
 }
