@@ -1,0 +1,7 @@
+1. CREATE DATABASE dashboard
+2. CREATE TABLE customers (id int NOT NULL PRIMARY KEY AUTO_INCREMENT, first_name VARCHAR(50) NOT NULL DEFAULT 'John', last_name VARCHAR(50) NOT NULL DEFAULT 'Doe', email VARCHAR(100) UNIQUE NOT NULL)
+3. CREATE INDEX customer_id_index ON customers (id)
+4. CREATE TABLE orders( id INT PRIMARY KEY AUTO_INCREMENT NOT NULL, purchase_date DATETIME NOT NULL DEFAULT NOW(), country VARCHAR(50) NOT NULL, device VARCHAR(50) NOT NULL, customer_id INT NOT NULL, FOREIGN KEY (customer_id) REFERENCES customers(id) )
+5. CREATE INDEX order_index ON orders (id, customer_id)
+6. CREATE TABLE order_items ( id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, ean VARCHAR(255) NOT NULL, quantity INT NOT NULL DEFAULT 1, price DECIMAL(20,2) NOT NULL, order_id INT NOT NULL, FOREIGN KEY (order_id) REFERENCES orders(id) )
+7. CREATE INDEX order_items_index ON order_items (id, order_id)
