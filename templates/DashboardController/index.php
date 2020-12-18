@@ -2,17 +2,17 @@
 //echo '<pre>'; print_r($chart['customers']); echo '</pre>';
 ?>
 
-    <main id="main">
+    <main id="main" class="top-30">
 
         <div class="container chart-data" id="chart-data">
             <div class="row chart-data__row">
-                <div class="col-12 chart-data__row-customer-total">Total number of customers: <?php echo $chart['customers']['customersTotal'] ?? 0; ?></div>
-                <div class="col-12 chart-data__row-orders-total">Total number of orders: <?php echo $chart['orders']['ordersTotal'] ?? 0; ?></div>
-                <div class="col-12 chart-data__row-revenue-total">Total revenue: <?php echo number_format($chart['orders']['ordersRevenue'], 2, ',', '.') ?? 0; ?>$</div>
+                <div class="col-12 chart-data__row-customer-total">Total number of customers: <span class="value"><?php echo $chart['customers']['customersTotal'] ?? 0; ?></span></div>
+                <div class="col-12 chart-data__row-orders-total">Total number of orders: <span class="value"><?php echo $chart['orders']['ordersTotal'] ?? 0; ?></span></div>
+                <div class="col-12 chart-data__row-revenue-total">Total revenue: <span class="value"><?php echo $chart['orders']['ordersRevenue'] ?? 0; ?></span>$</div>
             </div>
         </div>
 
-        <div class="container" id="chart">
+        <div class="container top-30" id="chart">
 
             <input type="hidden" id="chart-orders-data" value="<?php echo json_encode($chart['orders']['ordersByDays']); ?>" />
             <input type="hidden" id="chart-customers-data" value="<?php echo json_encode($chart['customers']['customersByDays']); ?>" />
@@ -56,13 +56,30 @@
         </div>
 
 
-        <div class="container">
-            <figure class="highcharts-figure">
-                <div id="container"></div>
-                <p class="highcharts-description">
-                    Orders and customers chart.
-                </p>
-            </figure>
+        <div class="container chart top-30">
+
+            <div class="row chart-loader">
+                <div class="col-12">
+                    <h2>Loading chart data...</h2>
+                </div>
+            </div>
+
+            <div class="row chart-row highcharts">
+                <div class="col-12">
+
+                    <figure class="chart-figure highcharts-figure" style="display: none;">
+
+                        <div id="container"></div>
+
+                        <p class="highcharts-description">
+                            Orders and customers chart.
+                        </p>
+
+                    </figure>
+
+                </div>
+
+            </div>
         </div>
 
     </main>

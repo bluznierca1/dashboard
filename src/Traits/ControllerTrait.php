@@ -119,6 +119,8 @@ trait ControllerTrait {
         // $extracted takes days from the end so we need to reverse array to show data correctly
         $filled['ordersByDays'] = !empty($filled['ordersByDays']) ? array_reverse($filled['ordersByDays']) : [];
 
+        $filled['ordersRevenue'] = number_format($filled['ordersRevenue'], 2, ',', '.');
+
         return $filled;
     }
 

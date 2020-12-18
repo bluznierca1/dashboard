@@ -10,7 +10,7 @@
     color: orange;
 }
 
-#main {
+.top-30 {
     margin-top: 30px;
 }
 
@@ -26,8 +26,4 @@
 
 #main .container form .datepickers  .datepicker-col .datepicker-col__submit {
     text-align: center;
-}
-
-#chart {
-    margin-top: 30px;
 }

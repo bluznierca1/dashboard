@@ -37,7 +37,11 @@ class AjaxController extends Controller {
             $dateStart = filter_var($postData['datepicker_date_start'], FILTER_SANITIZE_STRING);
             $dateTo = filter_var($postData['datepicker_date_end'], FILTER_SANITIZE_STRING);
             if( ValidationHelper::isValueCorrectDateFormat($dateStart) && ValidationHelper::isValueCorrectDateFormat($dateTo) ) {
-                $isValidationPassed = true;
+
+                if( strtotime($dateTo) > strtotime($dateStart) ) {
+                    $isValidationPassed = true;
+                }
+
             }
         }
 

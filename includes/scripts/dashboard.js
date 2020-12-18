@@ -10,16 +10,18 @@ var Dashboard;
         this.initAjaxOnDatepickersForm();
     }
 
-    Dashboard.prototype.getFormActionUrl = function( formData ) {
-        let url = null;
+    Dashboard.prototype.getValueFromForm = function( formData, propertyName ) {
+        let value = null;
+
         formData.forEach( function(data) {
 
-            if( data.hasOwnProperty('name') && data.hasOwnProperty('value') && data.name === 'action_url' ) {
-                url = data.value;
+            if( data.hasOwnProperty('name') && data.hasOwnProperty('value') && data.name === propertyName ) {
+                value = data.value;
             }
+
         });
 
-        return url;
+        return value;
     }
 
     Dashboard.prototype.initAjaxOnDatepickersForm = function() {
@@ -31,9 +33,23 @@ var Dashboard;
                 e.preventDefault();
 
                 const formData = form.serializeArray();
-                const url = self.getFormActionUrl(formData);
+                const url = self.getValueFromForm(formData, 'action_url');
 
-                if( url !== null ) {
+                // Check if dateTo > dateFrom
+                const areDatesCorrect = function( formData ) {
+                    let dateFrom = self.getValueFromForm(formData, 'datepicker_date_start');
+                    let dateTo = self.getValueFromForm(formData, 'datepicker_date_end');
+
+                        if( dateFrom && dateTo ) {
+                            return new Date(dateTo) > new Date(dateFrom);
+                        }
+
+                       return false;
+                }(formData);
+
+                console.log('areDatesCorrect', areDatesCorrect);
+
+                if( areDatesCorrect && url !== null ) {
 
                     return $.ajax({
                         url: url,
@@ -42,22 +58,64 @@ var Dashboard;
                         async: true,
                         data : formData,
                         beforeSend: function(){
-                            console.log('before');
+                            $('.highcharts-figure').hide();
+                            $('.chart-loader').show();
+
                         },
                         success: function(response) {
-                            console.log('response', response);
+                            console.log('response', JSON.parse(response));
+                            let parsedData = JSON.parse(response);
+                            self.parseResponseDataForChart(parsedData);
                         },
                         error: function(jqXHR, status, errorThrown) {
                             console.log('error', errorThrown);
                         }
 
                     });
+
                 }
 
-            })
+            });
 
         }
 
+    }
+
+    Dashboard.prototype.parseResponseDataForChart = function( parsedData ) {
+
+        if( parsedData.hasOwnProperty('chart') ) {
+
+            if( parsedData.chart.hasOwnProperty('customers') ) {
+
+                if( parsedData.chart.customers.hasOwnProperty('customersByDays') ) {
+                    $('#chart-customers-data').val(JSON.stringify(parsedData.chart.customers.customersByDays));
+                }
+
+                if( parsedData.chart.customers.hasOwnProperty('customersTotal') ) {
+                    $('.chart-data__row-customer-total .value').html(parsedData.chart.customers.customersTotal);
+                }
+
+            }
+
+            if( parsedData.chart.hasOwnProperty('orders') ) {
+
+                if( parsedData.chart.orders.hasOwnProperty('ordersByDays') ) {
+                    $('#chart-orders-data').val(JSON.stringify(parsedData.chart.orders.ordersByDays));
+                }
+
+                if( parsedData.chart.orders.hasOwnProperty('ordersTotal') ) {
+                    $('.chart-data__row-orders-total .value').html(parsedData.chart.orders.ordersTotal);
+                }
+
+                if( parsedData.chart.orders.hasOwnProperty('ordersRevenue') ) {
+                    $('.chart-data__row-revenue-total .value').html(parsedData.chart.orders.ordersRevenue);
+                }
+
+            }
+
+        }
+
+        this.initChart();
     }
 
     Dashboard.prototype.initDatePickers = function() {
@@ -93,16 +151,35 @@ var Dashboard;
         }).datepicker('update', date);
     }
 
-    Dashboard.prototype.initChart = function() {
-        const ordersData = JSON.parse($('#chart-orders-data').val());
-        const customersData = JSON.parse($('#chart-customers-data').val());
+    Dashboard.prototype.prepareDataForChart = function() {
 
-        let dateStart = $('#date-start').val();
+        let ordersDataInput = $('#chart-orders-data');
+        let customersDataInput = $('#chart-customers-data');
+        let dateStartInput = $('#date-start');
+
+        const ordersData = ordersDataInput.length ? JSON.parse(ordersDataInput.val()) : [];
+        const customersData = customersDataInput.length ? JSON.parse(customersDataInput.val()) : [];
+        const dateStart = dateStartInput.length ? dateStartInput.val() : '';
+
+        return {
+            ordersData: ordersData ? ordersData : [],
+            customersData: customersData ? customersData : [],
+            dateStart: dateStart
+        }
+
+    }
+
+    Dashboard.prototype.initChart = function() {
+
+        const chartData = this.prepareDataForChart();
+
+        const ordersData    = chartData.ordersData;
+        const customersData = chartData.customersData;
+        let dateStart     = chartData.dateStart;
+
         if( dateStart ) {
             dateStart = dateStart.split('-');
         }
-
-        console.log('dateStart', dateStart);
 
         const chart = Highcharts.chart('container', {
             chart: {
@@ -138,6 +215,9 @@ var Dashboard;
                 }
             ],
         });
+
+        $('.highcharts-figure').show();
+        $('.chart-loader').hide();
 
     }
 

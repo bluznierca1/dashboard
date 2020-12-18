@@ -4,10 +4,24 @@ namespace Dashboard\Helpers;
 
 class ValidationHelper {
 
+    /**
+     * Check if given number is between $min and $max
+     * 
+     * @param int $value
+     * @param int $min
+     * @param int $max
+     * @return bool
+     */
     public static function isNumberBetween( int $value = -1, int $min = 0, int $max = 99 ): bool {
         return ( $value >= $min && $value <= $max );
     }
 
+    /**
+     * Check if given value is date: YYYY-mm-dd
+     *
+     * @param string $value
+     * @return bool
+     */
     public static function isValueCorrectDateFormat( string $value = '' ): bool {
 
         // correct date format we support here: YYYY-mm-dd
