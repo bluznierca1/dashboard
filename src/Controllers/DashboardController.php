@@ -11,9 +11,8 @@ class DashboardController extends Controller {
 
     public function index() {
 
-
         $currentDate = date('Y-m-d');
-        $dateMonthAgo = date('Y-m-d', strtotime('-1 year'));
+        $dateMonthAgo = date('Y-m-d', strtotime('-1 month'));
 
         $data['pageTitle'] = 'Hello World';
         $data['dateNow'] = $currentDate;
@@ -28,21 +27,24 @@ class DashboardController extends Controller {
         $data['chart']['orders'] = $this->prepareDataForChartOrder( $data['chart']['orders'], $numberOfDaysBetweenDates, $currentDate );
         $data['chart']['customers'] = $this->prepareDataForChartCustomers( $data['chart']['customers'], $numberOfDaysBetweenDates, $currentDate);
 
-        echo '<pre>';
-        print_r($data);
-        die();
-
         $this->renderView( $data );
     }
 
+    /**
+     * SKIP building data based on customers who deleted accounts
+     * build customers data for chart
+     *
+     * @param array $customersData
+     * @param int $numberOfDaysBetweenDates
+     * @param string $dateTo
+     * @return array
+     */
     public function prepareDataForChartCustomers( array $customersData = [], int $numberOfDaysBetweenDates = 1, string $dateTo = '' ) {
         $customersForChart = [];
 
         // number of all customers until given $dateTo - will get decreased
         // by customers who got created in the range of dates
-        $customersForChart['existingCustomers'] = count($customersData);
-
-        echo 'TOTAL: ' . $customersForChart['existingCustomers'] . '<br />';
+        $customersForChart['existingCustomers'] = $customersForChart['customersTotal'] = count($customersData);
 
         for(; $numberOfDaysBetweenDates >= 0; $numberOfDaysBetweenDates-- ) {
 
@@ -80,8 +82,8 @@ class DashboardController extends Controller {
         // Loop number of days that we need for chart
         for($i = 0;  $i < $numberOfDaysBetweenDates; $i++ ) {
 
-            // Set index to 0 because
-            $filled['ordersByDays'][$i] = null;
+            // Initially number of orders for particular day is 0
+            $filled['ordersByDays'][$i] = 0;
 
             // $dateTo - $i: check each day from $dateTo until $dateFrom
             $extracted = date('Y-m-d', strtotime('-' . $i . 'day', strtotime($dateTo)));

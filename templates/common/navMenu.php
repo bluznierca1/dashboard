@@ -1,4 +1,4 @@
-<nav class="navbar nav">
+<nav class="navbar nav" style="background: #4c4e54;">
 
     <div class="container-fluid nav justify-content-center">
 

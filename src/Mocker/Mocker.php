@@ -61,35 +61,38 @@ class Mocker {
      */
     public function fillCustomersTable(): bool {
 
-        $content = file_get_contents('https://jsonplaceholder.typicode.com/users');
+        $content = file_get_contents('https://randomuser.me/api/?results=50');
 
         if( empty($content) ) {
             return false;
         }
 
+
+
         $decodedContent = json_decode($content, true);
 
-        if( empty($decodedContent) ) {
+        if( empty($decodedContent['results']) ) {
             return false;
         }
 
         $customersEntity = new CustomerEntity();
 
         $success = true;
-        foreach( $decodedContent as $fakeCustomer ) {
-
-            echo 'date: ' . date('Y-m-d H:i:s', VariableHelper::getRandomIntegerFromRange(strtotime('-2 years'), time())) . '<br />';
+        foreach( $decodedContent['results'] as $fakeCustomer ) {
 
             $foundCustomer = $customersEntity->findByEmail($fakeCustomer['email']);
 
-            $explodedName = explode(' ', $fakeCustomer['name']);
             $customerData = [
                 'id' => $foundCustomer['id'] ?? null,
-                'first_name' => $explodedName[0],
-                'last_name' => $explodedName[1],
+                'first_name' => $fakeCustomer['name']['first'],
+                'last_name' => $fakeCustomer['name']['last'],
                 'email' => $fakeCustomer['email'],
-                'date_created' => date('Y-m-d H:i:s', VariableHelper::getRandomIntegerFromRange(strtotime('-2 years'), time()))
+                'date_created' => date('Y-m-d H:i:s', VariableHelper::getRandomIntegerFromRange(strtotime('-3 month'), time()))
             ];
+
+//            echo '<pre>';
+//            print_r($customerData);
+//            die();
 
             if( !$customersEntity->save($customerData) ) {
                 echo $fakeCustomer['name'] . ' FAILED while saving. <br />';
@@ -123,8 +126,8 @@ class Mocker {
             $numberOfOrders = VariableHelper::getRandomIntegerFromRange(1, 50);
 
             for ($i = 0; $i < $numberOfOrders; $i++) {
-                // make random date from 3 yars ago until now
-                $randomTimestamp = VariableHelper::getRandomIntegerFromRange(strtotime('-2 years'), time());
+
+                $randomTimestamp = VariableHelper::getRandomIntegerFromRange(strtotime('-3 month'), time());
 
                 $countries = [
                     'Denmark',
@@ -203,14 +206,14 @@ class Mocker {
 
         $success = true;
         foreach( $allOrders as $order ) {
-            $numberOfProductsForOrder = VariableHelper::getRandomIntegerFromRange(1, 20); // random number of products assigned to order
+            $numberOfProductsForOrder = VariableHelper::getRandomIntegerFromRange(20, 100); // random number of products assigned to order
 
             for( $i = 0; $i < $numberOfProductsForOrder; $i++ ) {
 
                 $data = [
                     'ean'       => (string) VariableHelper::getRandomIntegerFromRange(10000000, 99999999), // 8 or 13 digits. Go for 8
                     'quantity'  => VariableHelper::getRandomIntegerFromRange(1, 100),
-                    'price'     => VariableHelper::getRandomIntegerFromRange(1, 10000) / 100,
+                    'price'     => VariableHelper::getRandomIntegerFromRange(1, 100) / 100,
                     'order_id'  => $order['id']
                 ];
 
