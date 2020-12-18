@@ -54,15 +54,14 @@ var Dashboard;
                     });
                 }
 
-
-
-
             })
+
         }
+
     }
 
     Dashboard.prototype.initDatePickers = function() {
-        var datepickerStart = $('#datepicker-start'),
+        let datepickerStart = $('#datepicker-start'),
             datepickerEnd = $('#datepicker-end');
 
         if( datepickerStart.length && datepickerEnd.length ) {
@@ -81,9 +80,9 @@ var Dashboard;
 
         let date;
         if( past ) {
-            let past = new Date();
-            past.setMonth( past.getMonth() - 1 );
-            date = past;
+            let pastDate = new Date();
+            pastDate.setMonth( pastDate.getMonth() - 1 );
+            date = pastDate;
         } else {
             date = new Date();
         }
