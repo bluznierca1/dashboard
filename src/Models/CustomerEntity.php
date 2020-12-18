@@ -162,6 +162,12 @@ class CustomerEntity extends DB implements EntityInterface {
 
     }
 
+    /**
+     * Get all customers registered until given date
+     *
+     * @param string $dateTo
+     * @return array
+     */
     public function getCustomersUntilGivenDate( string $dateTo = '' ): array {
         if( empty($dateTo) ) {
             return [];
@@ -192,6 +198,7 @@ class CustomerEntity extends DB implements EntityInterface {
         } catch( Exception $e ) {
             die(' ERROR: ' . $e->getMessage());
         }
+
     }
 
 }

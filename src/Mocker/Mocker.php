@@ -8,6 +8,7 @@ use Dashboard\Models\OrderEntity;
 use Dashboard\Models\OrderItemsEntity;
 
 class Mocker {
+
     /**
      * @return bool
      */
@@ -61,13 +62,12 @@ class Mocker {
      */
     public function fillCustomersTable(): bool {
 
+        // call for random users data
         $content = file_get_contents('https://randomuser.me/api/?results=50');
 
         if( empty($content) ) {
             return false;
         }
-
-
 
         $decodedContent = json_decode($content, true);
 
@@ -89,10 +89,6 @@ class Mocker {
                 'email' => $fakeCustomer['email'],
                 'date_created' => date('Y-m-d H:i:s', VariableHelper::getRandomIntegerFromRange(strtotime('-3 month'), time()))
             ];
-
-//            echo '<pre>';
-//            print_r($customerData);
-//            die();
 
             if( !$customersEntity->save($customerData) ) {
                 echo $fakeCustomer['name'] . ' FAILED while saving. <br />';
@@ -253,4 +249,5 @@ class Mocker {
 
         return false;
     }
+
 }

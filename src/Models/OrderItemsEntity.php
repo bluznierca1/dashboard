@@ -89,6 +89,12 @@ class OrderItemsEntity extends DB implements EntityInterface {
         return $this->deleteAll(self::$tableName);
     }
 
+    /**
+     * Retrieve total number of items for order
+     * And total revenue ( item's price * quantity )
+     * @param int $orderId
+     * @return array
+     */
     public function getTotalItemsAndRevenueForOrder( int $orderId ): array {
         $query = 'SELECT COUNT(id) AS total_items, SUM( price * quantity) AS total_revenue FROM ' . self::$tableName . ' WHERE order_id = ?';
 

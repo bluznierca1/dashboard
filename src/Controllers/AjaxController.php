@@ -9,10 +9,10 @@ class AjaxController extends Controller {
 
     use ControllerTrait;
 
-    public function hello() {
-        echo 'HELLO from ajax controller <br />';
-    }
-
+    /**
+     * Delegate proper method for handling AJAX request based on provided action
+     * return empty JSON if method not found
+     */
     public function handleAjax(): void {
         $postData = $this->request->getPostRequestData();
 
@@ -26,7 +26,11 @@ class AjaxController extends Controller {
 
     }
 
-    protected function getChartDataByRange() {
+    /**
+     * Build data for chart for given time range
+     * Return as JSON
+     */
+    protected function getChartDataByRange(): void {
         $postData = $postData = $this->request->getPostRequestData();
 
         // validate

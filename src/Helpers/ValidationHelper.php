@@ -6,7 +6,7 @@ class ValidationHelper {
 
     /**
      * Check if given number is between $min and $max
-     * 
+     *
      * @param int $value
      * @param int $min
      * @param int $max
@@ -48,18 +48,25 @@ class ValidationHelper {
         return false;
     }
 
+    /**
+     * Check if expected keys are included in array
+     *
+     * @param array $expectedFields
+     * @param array $receivedArray
+     * @return bool
+     */
     public static function areExpectedFieldsInArray( array $expectedFields = [], array $receivedArray = [] ): bool {
 
-    $isProvidedData = true;
-    foreach( $expectedFields as $expectedField ) {
-        if( !isset($receivedArray[$expectedField]) ) {
-            $isProvidedData = false;
-            break;
+        $isProvidedData = true;
+        foreach( $expectedFields as $expectedField ) {
+            if( !isset($receivedArray[$expectedField]) ) {
+                $isProvidedData = false;
+                break;
+            }
         }
+
+        return $isProvidedData;
+
     }
-
-    return $isProvidedData;
-
-}
 
 }

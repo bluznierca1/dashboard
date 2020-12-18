@@ -139,7 +139,7 @@ class Request {
         $this->requestUriFilename = VariableHelper::removePhpExtensionFromString( $this->requestUriFilepath );
         $this->requestUriPreparedForRouter = VariableHelper::prepareRequestUriPathForRouter($explodedUri['base']);
 
-        if( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
+        if( $_SERVER['REQUEST_METHOD'] === 'POST' ) { // set post data. validation will be handled in proper methods
             $this->postRequestData = $_POST;
         }
 

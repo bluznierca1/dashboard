@@ -69,6 +69,12 @@ trait ControllerTrait {
 
     }
 
+    /**
+     * Receive total revenue and number of items assigned to order
+     *
+     * @param int|null $orderId
+     * @return array
+     */
     public function getTotalPriceAndNumberOfItemsForOrder( int $orderId = null): array {
 
         if( !isset($orderId) ) {
@@ -80,7 +86,15 @@ trait ControllerTrait {
         return $orderItemsEntity->getTotalItemsAndRevenueForOrder($orderId);
     }
 
-    // Get number of orders received for a specific day
+    /**
+     * Get number of orders received for a specific day
+     * Get all items assigned to order and calculate total revenue
+     *
+     * @param array $ordersData
+     * @param int $numberOfDaysBetweenDates
+     * @param string $dateTo
+     * @return array
+     */
     public function prepareDataForChartOrder( array $ordersData = [], int $numberOfDaysBetweenDates = 1, string $dateTo = '' ): array {
 
         $filled = [];
@@ -119,6 +133,7 @@ trait ControllerTrait {
         // $extracted takes days from the end so we need to reverse array to show data correctly
         $filled['ordersByDays'] = !empty($filled['ordersByDays']) ? array_reverse($filled['ordersByDays']) : [];
 
+        // display total revenue in nice format
         $filled['ordersRevenue'] = number_format($filled['ordersRevenue'], 2, ',', '.');
 
         return $filled;

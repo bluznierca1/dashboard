@@ -1,6 +1,4 @@
-<?php require_once(TEMPLATES_PATH . 'header.php');
-//echo '<pre>'; print_r($chart['customers']); echo '</pre>';
-?>
+<?php require_once(TEMPLATES_PATH . 'header.php'); ?>
 
     <main id="main" class="top-30">
 

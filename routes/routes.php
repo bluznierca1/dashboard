@@ -23,5 +23,4 @@ Router::registerPathWithController('index', 'DashboardController', 'index');
 Router::registerPathWithController('admin/panel', 'DashboardController', 'hello');
 
 // AjaxController
-Router::registerPathWithController('hello', 'AjaxController', 'hello');
 Router::registerPathWithController('handle-ajax', 'AjaxController', 'handleAjax');

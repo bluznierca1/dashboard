@@ -10,6 +10,13 @@ var Dashboard;
         this.initAjaxOnDatepickersForm();
     }
 
+    /**
+     * Extract value of given parameter from form array
+     *
+     * @param formData
+     * @param propertyName
+     * @returns {null}
+     */
     Dashboard.prototype.getValueFromForm = function( formData, propertyName ) {
         let value = null;
 
@@ -24,6 +31,11 @@ var Dashboard;
         return value;
     }
 
+    /**
+     * Init AJAX call for datepickers form
+     * Parse response and trigger function for updating chart
+     *
+     */
     Dashboard.prototype.initAjaxOnDatepickersForm = function() {
         var self = this,
             form = $('#datepickers-form');
@@ -58,16 +70,16 @@ var Dashboard;
                         async: true,
                         data : formData,
                         beforeSend: function(){
+                            // Show loader, hide chart
                             $('.highcharts-figure').hide();
                             $('.chart-loader').show();
-
                         },
                         success: function(response) {
-                            console.log('response', JSON.parse(response));
                             let parsedData = JSON.parse(response);
                             self.parseResponseDataForChart(parsedData);
                         },
                         error: function(jqXHR, status, errorThrown) {
+                            $('.chart-loader').html('Something went wrong while loading chart data. Try again.');
                             console.log('error', errorThrown);
                         }
 
@@ -81,6 +93,14 @@ var Dashboard;
 
     }
 
+    /**
+     * Parse JSON from response
+     * Update hidden input fields containing chart data
+     * Update data on top (revenue, total customers etc.)
+     * Init chart to reload
+     *
+     * @param parsedData
+     */
     Dashboard.prototype.parseResponseDataForChart = function( parsedData ) {
 
         if( parsedData.hasOwnProperty('chart') ) {
@@ -118,6 +138,9 @@ var Dashboard;
         this.initChart();
     }
 
+    /**
+     * Init datepickers
+     */
     Dashboard.prototype.initDatePickers = function() {
         let datepickerStart = $('#datepicker-start'),
             datepickerEnd = $('#datepicker-end');
@@ -131,6 +154,10 @@ var Dashboard;
 
     }
 
+    /**
+     * @param element
+     * @param past
+     */
     Dashboard.prototype.initDatePicker = function( element, past ) {
         if( typeof past == 'undefined' ) {
             past = false;
@@ -151,6 +178,11 @@ var Dashboard;
         }).datepicker('update', date);
     }
 
+    /**
+     * Read data for chart from DOM and return as object
+     *
+     * @returns {{customersData: (any|*[]), dateStart: (*|string), ordersData: (any|*[])}}
+     */
     Dashboard.prototype.prepareDataForChart = function() {
 
         let ordersDataInput = $('#chart-orders-data');
@@ -169,6 +201,10 @@ var Dashboard;
 
     }
 
+    /**
+     * Init chart with data from DOM
+     * Show chart, hide loader
+     */
     Dashboard.prototype.initChart = function() {
 
         const chartData = this.prepareDataForChart();
@@ -221,6 +257,7 @@ var Dashboard;
 
     }
 
+    // Let's make it float
     $(function() {
         window.Dashboard = new Dashboard;
     });

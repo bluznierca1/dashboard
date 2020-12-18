@@ -108,7 +108,4 @@ trait EntityTrait {
 
     }
 
-
-
-
 }

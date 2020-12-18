@@ -87,12 +87,18 @@ class OrderEntity extends DB implements EntityInterface {
     }
 
     /**
+     * Erase all records in DB
      * @return bool
      */
     public function eraseAllRecords(): bool {
         return $this->deleteAll(self::$tableName);
     }
 
+    /**
+     * @param string $dateFrom
+     * @param string $dateTo
+     * @return array|null
+     */
     public function fetchDataForDateRange( string $dateFrom = '', string $dateTo = '' ): ?array {
 
         $query = 'SELECT * FROM ' . self::$tableName . ' WHERE purchase_date BETWEEN ? AND ?';

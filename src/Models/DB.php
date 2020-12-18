@@ -36,6 +36,10 @@ abstract class DB {
         return $connection;
     }
 
+    /**
+     * @param string $query
+     * @return array
+     */
     protected function executeGetRowsQuery( string $query = '' ): array {
 
         try {
