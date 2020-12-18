@@ -13,6 +13,7 @@ class Request {
     private $requestUriFilepath = ''; // filename (with extension)
     private $requestUriFilename = ''; // filename (without extension)
     private $requestUriPreparedForRouter = '';
+    private $postRequestData = [];
 
     public function __construct( string $requestURI = '' ) {
 
@@ -52,6 +53,10 @@ class Request {
 
     public function getRequestUriPreparedForRouter(): string {
         return $this->requestUriFilepath;
+    }
+
+    public function getPostRequestData(): array {
+        return $this->postRequestData;
     }
 
     private function returnHomePage(): void {
@@ -133,6 +138,10 @@ class Request {
         $this->requestUriFilepath = $explodedUri['base'][0];
         $this->requestUriFilename = VariableHelper::removePhpExtensionFromString( $this->requestUriFilepath );
         $this->requestUriPreparedForRouter = VariableHelper::prepareRequestUriPathForRouter($explodedUri['base']);
+
+        if( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
+            $this->postRequestData = $_POST;
+        }
 
     }
 
