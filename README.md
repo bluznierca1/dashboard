@@ -74,3 +74,23 @@ that one because of Apache (live would be most probably Nginx)
 ### queries_for_db.txt
 All queries used to build DB. DOES NOT include queries used to pull data from DB.
 
+# Example photos from project (since it was running on localhost)
+
+## Initial load (before refilling DB):
+![Alt text](includes/imgs/initial_before_db_refill.png?raw=true "Title")
+
+## After AJAX request (changing dates)
+![Alt text](includes/imgs/ajax_update.png?raw=true "Title")
+
+## After 2nd AJAX request (changing dates)
+![Alt text](includes/imgs/ajax_update_2.png?raw=true "Title")
+
+## Refilling DB
+![Alt text](includes/imgs/db_refill.png?raw=true "Title")
+
+### Initial load after DB refill:
+![Alt text](includes/imgs/initial_after_db_refill.png?raw=true "Title")
+
+
+
+
