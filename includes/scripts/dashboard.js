@@ -6,6 +6,59 @@ var Dashboard;
         this.initDatePickers();
 
         this.initChart();
+
+        this.initAjaxOnDatepickersForm();
+    }
+
+    Dashboard.prototype.getFormActionUrl = function( formData ) {
+        let url = null;
+        formData.forEach( function(data) {
+
+            if( data.hasOwnProperty('name') && data.hasOwnProperty('value') && data.name === 'action_url' ) {
+                url = data.value;
+            }
+        });
+
+        return url;
+    }
+
+    Dashboard.prototype.initAjaxOnDatepickersForm = function() {
+        var self = this,
+            form = $('#datepickers-form');
+
+        if( form.length ) {
+            form.on('submit', function(e) {
+                e.preventDefault();
+
+                const formData = form.serializeArray();
+                const url = self.getFormActionUrl(formData);
+
+                if( url !== null ) {
+
+                    return $.ajax({
+                        url: url,
+                        type: 'POST',
+                        cache: false,
+                        async: true,
+                        data : formData,
+                        beforeSend: function(){
+                            console.log('before');
+                        },
+                        success: function(response) {
+                            console.log('response', response);
+                        },
+                        error: function(jqXHR, status, errorThrown) {
+                            console.log('error', errorThrown);
+                        }
+
+                    });
+                }
+
+
+
+
+            })
+        }
     }
 
     Dashboard.prototype.initDatePickers = function() {

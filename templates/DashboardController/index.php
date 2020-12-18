@@ -43,6 +43,8 @@
 
                     <div class="col-4 datepicker-col">
                         <div class="datepicker-col__submit">
+                            <input type="hidden" name="action" value="get_chart_data_by_range" />
+                            <input type="hidden" name="action_url" value="<?php echo HOME_URL . '/handle-ajax.php'; ?>" />
                             <input type="submit" name="datepicker_submit" value="SUBMIT" class="btn btn-success" />
                         </div>
                     </div>
