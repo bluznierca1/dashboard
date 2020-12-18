@@ -1,2 +1,5 @@
+# That file would be excluded from GIT but that project is not going live.
+# Even if that happens, it will look different :)
+
 RewriteEngine on
 RewriteRule ^((?!index\.php|includes/scripts/*|includes/css).+)$ http://localhost:8080/dashboard/index.php [L]
