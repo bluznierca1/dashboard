@@ -23,7 +23,7 @@ abstract class DB {
 
         $ini_array = parse_ini_file(APP_ROOT . "/config.ini", true)['database_configuration'];
 
-        $connection = mysqli_connect($ini_array['database_host'], $ini_array['database_user'], $ini_array['database_password'], $ini_array['database_name']);
+        $connection = @mysqli_connect($ini_array['database_host'], $ini_array['database_user'], $ini_array['database_password'], $ini_array['database_name']);
 
         // Test if connection succeeded
         if(mysqli_connect_errno()) {
